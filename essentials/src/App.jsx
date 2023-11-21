@@ -1,17 +1,18 @@
-import { CORE_CONCEPTS } from './data';
+import { CORE_CONCEPTS } from '@/data';
 import Header from '@/components/Header';
-import CoreConceptList from './components/CoreConceptList';
-import Examples from './components/Examples';
+import CoreConcepts from '@/components/concepts/CoreConcepts';
+import Examples from '@/components/examples/Examples';
+import TabButton from '@/components/examples/TabButton';
 
 function App() {
     return (
-        <div>
+        <>
             <Header />
             <main>
-                <CoreConceptList concepts={CORE_CONCEPTS} />
+                <CoreConcepts concepts={CORE_CONCEPTS} />
                 <Examples />
             </main>
-        </div>
+        </>
     );
 }
 

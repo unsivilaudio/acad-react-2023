@@ -1,9 +1,9 @@
-import CoreConcept from './CoreConcept';
+import CoreConcept from '@/components/concepts/CoreConcept';
+import Section from '@/components/ui/Section';
 
-export default function CoreConceptList({ concepts }) {
+export default function CoreConcepts({ concepts }) {
     return (
-        <section id='core-concepts'>
-            <h2>Core Concepts</h2>
+        <Section id='core-concepts' title='Core Concepts'>
             <ul>
                 {concepts.map(({ title, description, image }) => (
                     <CoreConcept
@@ -14,6 +14,6 @@ export default function CoreConceptList({ concepts }) {
                     />
                 ))}
             </ul>
-        </section>
+        </Section>
     );
 }
