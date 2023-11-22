@@ -2,7 +2,7 @@
 export default {
     content: ['./index.html', './src/**/*.{js,ts,jsx,tsx,css}'],
     theme: {
-        font: {
+        fontFamily: {
             sans: ['Quicksand', 'Arial', 'Helvetica'],
             display: ['Roboto Condensed', 'monospace'],
         },

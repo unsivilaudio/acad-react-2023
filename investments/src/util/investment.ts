@@ -1,11 +1,11 @@
-type InvestmentInput = {
+export type InvestmentInput = {
     initialInvestment: number;
     annualInvestment: number;
     expectedReturn: number;
     duration: number;
 };
 
-type InvestmentResult = {
+export type InvestmentResult = {
     year: number;
     interest: number;
     valueEndOfYear: number;
