@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Refs & Portals</title>
+    </head>
+    <body>
+        <div id="modal"></div>
+        <div
+            id="content"
+            class="mx-auto my-8 max-w-[60rem] rounded-2xl bg-[radial-gradient(#0b201d,#021619)] p-8 shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
+        >
+            <header>
+                <h1
+                    class="font-title text-center text-6xl font-bold uppercase text-[#c1e2dd]"
+                    style="text-shadow: 0 0 4px rgba(35, 34, 34, 0.4)"
+                >
+                    The
+                    <em class="not-italic text-[#00eeff]">Almost</em>
+                    Final Countdown
+                </h1>
+                <p class="text-center text-xl text-[#c6f4f2]">
+                    Stop the timer once you estimate that time is (almost) up
+                </p>
+            </header>
+            <div id="root"></div>
+        </div>
+        <script type="module" src="/src/main.jsx"></script>
+    </body>
+</html>
