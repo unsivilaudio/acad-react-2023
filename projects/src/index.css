@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;600&family=Montserrat:wght@100;300;400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    .animate-slide-ft::backdrop {
+        background: rgba(0, 0, 0, 0.9);
+    }
+
+    .animate-slide-ft[open] {
+        animation: slide-in-from-top 0.3s forwards ease-out;
+    }
+
+    @keyframes slide-in-from-top {
+        from {
+            opacity: 0;
+            transform: translateY(-100vh);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    font-family: 'Montserrat', Arial, sans-serif;
+    line-height: 1.5;
+    background: #e1e6ed;
+}
