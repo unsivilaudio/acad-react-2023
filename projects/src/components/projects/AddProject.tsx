@@ -1,31 +1,17 @@
-import { type SyntheticEvent, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { type SyntheticEvent, useRef } from 'react';
 
 import Input from '@/components/ui/Input';
 import { useProjectsContext } from '@/context/projects-context';
 import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 
-type AddProjectProps = {
-    open: boolean;
-    onClose(): void;
-};
-
-export default function AddProject({ open, onClose }: AddProjectProps) {
-    const dialog = useRef<HTMLDialogElement>(null);
-    const projectCtx = useProjectsContext();
-
-    useEffect(() => {
-        const current = dialog.current;
-        if (open) {
-            current!.showModal();
-        }
-
-        return () => {
-            if (current) {
-                current!.close();
-            }
-        };
-    }, [open]);
+export default function AddProject() {
+    const modal = useRef<HTMLDialogElement>(null);
+    const {
+        addProject,
+        showAddProject: open,
+        toggleShowAddProject,
+    } = useProjectsContext();
 
     function handleSubmitForm(event: SyntheticEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -35,18 +21,19 @@ export default function AddProject({ open, onClose }: AddProjectProps) {
         if (enteredTitle.trim() === '' || enteredDescription.trim() === '') {
             return;
         }
-        projectCtx.addProject({
+        addProject({
             title: enteredTitle,
             description: enteredDescription,
         });
+        handleCloseModal();
     }
 
-    return createPortal(
-        <dialog
-            ref={dialog}
-            onClose={onClose}
-            className='animate-slide-ft fixed z-50 mx-auto mt-[10%] w-[30rem] rounded-lg p-8 pb-12 drop-shadow-lg'
-        >
+    function handleCloseModal() {
+        toggleShowAddProject(false);
+    }
+
+    return (
+        <Modal ref={modal} onClose={handleCloseModal} open={open}>
             <h2 className='font-title text-3xl font-semibold'>
                 Add A New Project
             </h2>
@@ -72,7 +59,7 @@ export default function AddProject({ open, onClose }: AddProjectProps) {
                     <Button
                         variant='text'
                         type='button'
-                        onClick={onClose}
+                        onClick={handleCloseModal}
                         className='text-[#2d2d2d] hover:text-[#ef002c]'
                     >
                         Cancel
@@ -80,7 +67,6 @@ export default function AddProject({ open, onClose }: AddProjectProps) {
                     <Button>Save</Button>
                 </div>
             </form>
-        </dialog>,
-        document.getElementById('modal') as HTMLElement,
+        </Modal>
     );
 }

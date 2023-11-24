@@ -1,11 +1,13 @@
 import { useProjectsContext } from '@/context/projects-context';
 
-type SidebarProps = {
-    onShowAddProject(): void;
-};
+export default function Sidebar() {
+    const { projects, toggleShowAddProject, selectProject, selectedProject } =
+        useProjectsContext();
 
-export default function Sidebar({ onShowAddProject }: SidebarProps) {
-    const { projects, selectProject, selectedProject } = useProjectsContext();
+    function handleOpenAddProject() {
+        toggleShowAddProject();
+    }
+
     return (
         <nav className='flex flex-shrink-0 flex-col gap-8 rounded-br-2xl rounded-tr-2xl bg-[#343436] px-8 py-12 text-[#ecedea] shadow-[0_0_12px_3px_rgba(0,0,0,0.6)]'>
             <div>
@@ -16,7 +18,7 @@ export default function Sidebar({ onShowAddProject }: SidebarProps) {
             <div>
                 <button
                     className='rounded-lg bg-[rgba(255,255,255,0.15)] px-6 py-2 pr-7 text-xl font-semibold text-[#b9bab7] drop-shadow-lg duration-300 hover:bg-[rgba(0,0,0,0.35)] hover:text-current'
-                    onClick={onShowAddProject}
+                    onClick={handleOpenAddProject}
                 >
                     <span>+</span> Add Project
                 </button>

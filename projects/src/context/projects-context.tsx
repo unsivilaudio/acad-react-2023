@@ -39,17 +39,22 @@ const INITIAL_STATE = {
         },
     ] as Project[],
     selectedProject: null as null | string,
+    showAddProject: false,
 };
 
 type ProjectsState = typeof INITIAL_STATE;
 
 type ProjectsCtxValue = ProjectsState & {
-    addProject({ title, description }: Omit<Project, 'id' | 'tasks'>): void;
-    deleteProject(id: string): void;
+    addProject({
+        title,
+        description,
+    }: Omit<Project, 'id' | 'tasks' | 'date'>): void;
+    deleteProject(): void;
     selectProject(id: string): void;
     addTask(content: string): void;
     clearTask(id: string): void;
     markTask(id: string): void;
+    toggleShowAddProject(show?: boolean): void;
 };
 
 const ProjectsContext = createContext<ProjectsCtxValue | null>(null);
@@ -70,9 +75,7 @@ type SelectProject = {
 
 type DeleteProject = {
     type: 'DELETE_PROJECT';
-    payload: {
-        id: string;
-    };
+    payload?: never;
 };
 
 type AddProjectTask = {
@@ -94,13 +97,19 @@ type MarkProjectTask = {
     };
 };
 
+type ShowAddProject = {
+    type: 'TOGGLE_SHOW_PROJECT';
+    payload?: boolean;
+};
+
 type ProjectsActions =
     | AddProject
     | SelectProject
     | DeleteProject
     | AddProjectTask
     | ClearProjectTask
-    | MarkProjectTask;
+    | MarkProjectTask
+    | ShowAddProject;
 
 const projectsReducer = produce(
     (state: ProjectsState, action: ProjectsActions) => {
@@ -109,6 +118,7 @@ const projectsReducer = produce(
         switch (type) {
             case 'ADD_PROJECT':
                 state.projects = state.projects.concat(payload);
+                state.selectedProject = payload.id;
                 break;
             case 'SELECT_PROJECT':
                 state.selectedProject = payload.id;
@@ -143,8 +153,9 @@ const projectsReducer = produce(
                 }
                 break;
             case 'DELETE_PROJECT':
+                if (!state.selectedProject) break;
                 state.projects = state.projects.filter(
-                    (prj) => prj.id !== action.payload.id,
+                    (prj) => prj.id !== state.selectedProject,
                 );
                 break;
             case 'ADD_PROJECT_TASK':
@@ -152,6 +163,9 @@ const projectsReducer = produce(
                     (prj) => prj.id === state.selectedProject,
                 );
                 state.projects[prjIdx].tasks.push(payload);
+                break;
+            case 'TOGGLE_SHOW_PROJECT':
+                state.showAddProject = payload ?? !state.showAddProject;
                 break;
             default:
                 break;
@@ -178,8 +192,8 @@ export function ProjectsContextProvider({ children }: PropsWithChildren) {
         dispatch({ type: 'SELECT_PROJECT', payload: { id } });
     }
 
-    function handleDeleteProject(id: string) {
-        dispatch({ type: 'DELETE_PROJECT', payload: { id } });
+    function handleDeleteProject() {
+        dispatch({ type: 'DELETE_PROJECT' });
     }
 
     function handleAddTask(content: string) {
@@ -194,8 +208,13 @@ export function ProjectsContextProvider({ children }: PropsWithChildren) {
     function handleClearTask(id: string) {
         dispatch({ type: 'CLEAR_PROJECT_TASK', payload: { id } });
     }
+
     function handleMarkTask(id: string) {
         dispatch({ type: 'MARK_PROJECT_TASK', payload: { id } });
+    }
+
+    function handleShowAddProject(show: boolean) {
+        dispatch({ type: 'TOGGLE_SHOW_PROJECT', payload: show });
     }
 
     return (
@@ -208,6 +227,7 @@ export function ProjectsContextProvider({ children }: PropsWithChildren) {
                 addTask: handleAddTask,
                 clearTask: handleClearTask,
                 markTask: handleMarkTask,
+                toggleShowAddProject: handleShowAddProject,
             }}
         >
             {children}
