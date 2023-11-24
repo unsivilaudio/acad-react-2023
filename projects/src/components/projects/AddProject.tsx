@@ -25,6 +25,7 @@ export default function AddProject() {
             title: enteredTitle,
             description: enteredDescription,
         });
+        event.currentTarget.reset();
         handleCloseModal();
     }
 

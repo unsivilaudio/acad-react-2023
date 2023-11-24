@@ -38,7 +38,7 @@ const INITIAL_STATE = {
             date: new Date(),
         },
     ] as Project[],
-    selectedProject: null as null | string,
+    selectedProjectId: null as null | string,
     showAddProject: false,
 };
 
@@ -118,15 +118,15 @@ const projectsReducer = produce(
         switch (type) {
             case 'ADD_PROJECT':
                 state.projects = state.projects.concat(payload);
-                state.selectedProject = payload.id;
+                state.selectedProjectId = payload.id;
                 break;
             case 'SELECT_PROJECT':
-                state.selectedProject = payload.id;
+                state.selectedProjectId = payload.id;
                 break;
             case 'MARK_PROJECT_TASK':
-                if (!state.selectedProject) return state;
+                if (!state.selectedProjectId) return state;
                 prjIdx = state.projects.findIndex(
-                    (prj) => prj.id === state.selectedProject,
+                    (prj) => prj.id === state.selectedProjectId,
                 );
                 if (prjIdx > -1) {
                     const taskIdx = state.projects[prjIdx].tasks.findIndex(
@@ -142,9 +142,9 @@ const projectsReducer = produce(
                 }
                 break;
             case 'CLEAR_PROJECT_TASK':
-                if (!state.selectedProject) return state;
+                if (!state.selectedProjectId) return state;
                 prjIdx = state.projects.findIndex(
-                    (prj) => prj.id === state.selectedProject,
+                    (prj) => prj.id === state.selectedProjectId,
                 );
                 if (prjIdx > -1) {
                     state.projects[prjIdx].tasks = state.projects[
@@ -153,14 +153,15 @@ const projectsReducer = produce(
                 }
                 break;
             case 'DELETE_PROJECT':
-                if (!state.selectedProject) break;
+                if (!state.selectedProjectId) break;
                 state.projects = state.projects.filter(
-                    (prj) => prj.id !== state.selectedProject,
+                    (prj) => prj.id !== state.selectedProjectId,
                 );
+                state.selectedProjectId = null;
                 break;
             case 'ADD_PROJECT_TASK':
                 prjIdx = state.projects.findIndex(
-                    (prj) => prj.id === state.selectedProject,
+                    (prj) => prj.id === state.selectedProjectId,
                 );
                 state.projects[prjIdx].tasks.push(payload);
                 break;

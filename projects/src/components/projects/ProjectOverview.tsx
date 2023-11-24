@@ -10,7 +10,7 @@ export default function ProjectsList() {
     const {
         toggleShowAddProject,
         projects,
-        selectedProject,
+        selectedProjectId,
         addTask,
         deleteProject,
         clearTask,
@@ -65,15 +65,20 @@ export default function ProjectsList() {
         );
     }
 
-    const prjMatch = projects.find((prj) => prj.id === selectedProject);
-    console.log(prjMatch);
-    if (prjMatch) {
+    const selectedProject = projects.find(
+        (prj) => prj.id === selectedProjectId,
+    );
+    console.log(selectedProject);
+    if (selectedProject) {
         content = (
             <>
-                <ProjectDetail {...prjMatch} onDeleteProject={deleteProject} />
+                <ProjectDetail
+                    {...selectedProject}
+                    onDeleteProject={deleteProject}
+                />
                 <div className='h-1 rounded-full bg-slate-400' />
                 <ProjectTasks
-                    tasks={prjMatch.tasks}
+                    tasks={selectedProject.tasks}
                     onAddTask={addTask}
                     onDeleteTask={clearTask}
                     onMarkTask={markTask}

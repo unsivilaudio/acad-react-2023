@@ -1,7 +1,7 @@
 import { useProjectsContext } from '@/context/projects-context';
 
 export default function Sidebar() {
-    const { projects, toggleShowAddProject, selectProject, selectedProject } =
+    const { projects, toggleShowAddProject, selectProject, selectedProjectId } =
         useProjectsContext();
 
     function handleOpenAddProject() {
@@ -29,7 +29,7 @@ export default function Sidebar() {
                         key={prj.id}
                         onClick={selectProject.bind(null, prj.id)}
                         className={`cursor-pointer rounded-lg px-3 py-1 capitalize duration-300 hover:bg-[#747171] ${
-                            selectedProject === prj.id
+                            selectedProjectId === prj.id
                                 ? 'bg-[#f342be] hover:bg-[#f342be]'
                                 : ''
                         }`}
