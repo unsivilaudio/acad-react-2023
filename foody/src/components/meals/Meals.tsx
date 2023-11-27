@@ -27,9 +27,9 @@ export default function Meals() {
 
     if (isLoading) {
         return (
-            <p className='min-h-[30rem] w-full'>
+            <div className='min-h-[30rem] w-full'>
                 <Loader />
-            </p>
+            </div>
         );
     }
 
