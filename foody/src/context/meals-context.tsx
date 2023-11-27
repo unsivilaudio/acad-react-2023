@@ -7,7 +7,7 @@ import {
     type PropsWithChildren,
 } from 'react';
 
-type Meal = {
+export type Meal = {
     id: string;
     name: string;
     price: string;

@@ -1,29 +1,21 @@
 import { useEffect, type ReactNode } from 'react';
 
-import { useMealsContext } from '@/context/meals-context';
+import useHttp from '@/hooks/use-http';
+import { useMealsContext, type Meal } from '@/context/meals-context';
 import MealItem from '@/components/meals/MealItem';
 import Loader from '@/components/ui/Loader';
 
 export default function Meals() {
-    const { meals, setMeals, setMealsLoading, isLoading } = useMealsContext();
+    const { data, isLoading, error } = useHttp<Meal[]>(
+        'http://localhost:8080/meals',
+    );
+    const { meals, setMeals } = useMealsContext();
 
     useEffect(() => {
-        setMealsLoading(true);
-        fetch('http://localhost:8080/meals')
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Could not fetch meals!');
-                }
-                return res.json();
-            })
-            .then((data) => {
-                setMeals(data);
-            })
-            .catch((err) => console.log(err.message))
-            .finally(() => {
-                setMealsLoading(false);
-            });
-    }, [setMeals, setMealsLoading]);
+        if (data) {
+            setMeals(data);
+        }
+    }, [data, setMeals]);
 
     if (isLoading) {
         return (
@@ -34,7 +26,7 @@ export default function Meals() {
     }
 
     let content: ReactNode;
-    if (meals.length === 0) {
+    if (error || meals.length === 0) {
         content = (
             <p className='mx-auto max-w-[25rem] text-center text-2xl'>
                 Sorry, couldn't find an meals. Clear your search or reload the

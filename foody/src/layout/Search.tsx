@@ -23,7 +23,7 @@ export default function Search() {
     }
 
     return (
-        <p className='relative ml-7 flex w-[30rem] justify-start px-4'>
+        <div className='relative ml-7 flex w-[30rem] justify-start px-4'>
             <input
                 type='text'
                 value={term}
@@ -57,6 +57,6 @@ export default function Search() {
                     </span>
                 )}
             </p>
-        </p>
+        </div>
     );
 }
