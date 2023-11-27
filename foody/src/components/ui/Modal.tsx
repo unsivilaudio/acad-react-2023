@@ -8,16 +8,16 @@ import { createPortal } from 'react-dom';
 
 type ModalProps = ComponentPropsWithoutRef<'dialog'> & {
     open: boolean;
-    toggleShow: (show?: boolean) => void;
+    onClose: () => void;
     children: ReactNode;
 };
 
-export default function Modal({ children, open, toggleShow }: ModalProps) {
+export default function Modal({ children, open, onClose }: ModalProps) {
     const dialog = useRef<HTMLDialogElement>(null);
 
     function handleCloseModal() {
-        if (toggleShow) {
-            toggleShow(false);
+        if (open) {
+            onClose();
         }
     }
 

@@ -1,71 +1,59 @@
+import { type CartItem as ICartItem, useCartCtx } from '@/context/cart-context';
 import CartItem from '@/components/cart/CartItem';
 import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 
-type CartProps = {
-    open: boolean;
-    toggleShowCart: (show?: boolean) => void;
-};
+export default function Cart() {
+    const {
+        progress,
+        cart,
+        addToCart,
+        removeFromCart,
+        closeCart,
+        openCheckout,
+    } = useCartCtx();
 
-export default function Cart({ open, toggleShowCart }: CartProps) {
-    function handleCloseModal() {
-        toggleShowCart(false);
+    function handleAddItem(item: ICartItem) {
+        addToCart(item);
     }
 
-    function handleAddItem() {
-        //@TODO
-    }
-
-    function handleRemoveItem() {
-        // @TODO
+    function handleRemoveItem(id: string) {
+        removeFromCart(id);
     }
 
     return (
-        <Modal open={open} toggleShow={toggleShowCart}>
+        <Modal open={progress === 'cart'} onClose={closeCart}>
             <div>
-                <h1 className='font-title my-4 text-2xl font-bold'>
+                <h1 className='my-4 font-title text-2xl font-bold'>
                     Your Cart
                 </h1>
                 <ul className='my-2 space-y-1'>
-                    <CartItem
-                        title='Seafood Paella'
-                        quantity={1}
-                        price={19.99}
-                        onDecrement={handleRemoveItem}
-                        onIncrement={handleAddItem}
-                    />
-                    <CartItem
-                        title='Seafood Paella'
-                        quantity={1}
-                        price={19.99}
-                        onDecrement={handleRemoveItem}
-                        onIncrement={handleAddItem}
-                    />
-                    <CartItem
-                        title='Seafood Paella'
-                        quantity={1}
-                        price={19.99}
-                        onDecrement={handleRemoveItem}
-                        onIncrement={handleAddItem}
-                    />
-                    <CartItem
-                        title='Seafood Paella'
-                        quantity={1}
-                        price={19.99}
-                        onDecrement={handleRemoveItem}
-                        onIncrement={handleAddItem}
-                    />
+                    {cart.items.map((item) => (
+                        <CartItem
+                            key={item.id}
+                            title={item.name}
+                            quantity={item.quantity}
+                            price={item.price}
+                            onDecrement={handleRemoveItem.bind(null, item.id)}
+                            onIncrement={handleAddItem.bind(null, item)}
+                        />
+                    ))}
                 </ul>
                 <p className='my-8 flex justify-end text-lg font-bold text-[#46443c]'>
-                    Total: $149.95
+                    Total: ${cart.totalAmount.toFixed(2)}
                 </p>
                 <div className='flex justify-end gap-4'>
-                    <Button variant='text-dark' onClick={handleCloseModal}>
-                        Cancel
+                    <Button variant='text-dark' onClick={closeCart}>
+                        Close
                     </Button>
-                    <Button className='text-[#1d1a16] hover:text-[#312c1d] active:text-[#312c1d]'>
-                        Order Now
-                    </Button>
+                    {cart.totalAmount > 0 && (
+                        <Button
+                            className='text-[#1d1a16] hover:text-[#312c1d] active:text-[#312c1d]'
+                            onClick={openCheckout}
+                        >
+                            Order Now
+                        </Button>
+                    )}
                 </div>
             </div>
         </Modal>

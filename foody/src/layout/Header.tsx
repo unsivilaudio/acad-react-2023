@@ -1,13 +1,9 @@
 import headerLogo from '@/assets/logo.jpg';
+import { useCartCtx } from '@/context/cart-context';
 
-type HeaderProps = {
-    onShowCart: (show?: boolean) => void;
-};
-
-export default function Header({ onShowCart }: HeaderProps) {
-    function handleShowCart() {
-        onShowCart(true);
-    }
+export default function Header() {
+    const { openCart, cart } = useCartCtx();
+    const totalItems = cart.items.reduce((a, b) => a + b.quantity, 0);
 
     return (
         <header className='flex items-center justify-between px-[10%] py-12'>
@@ -21,8 +17,8 @@ export default function Header({ onShowCart }: HeaderProps) {
                     Foody
                 </h1>
             </div>
-            <button className='font-title text-2xl' onClick={handleShowCart}>
-                Cart (3)
+            <button className='font-title text-2xl' onClick={openCart}>
+                Cart ({totalItems})
             </button>
         </header>
     );
