@@ -49,7 +49,7 @@ export default function useHttp<T>(
         setData(initialData || null);
         setError(undefined);
         setIsLoading(false);
-    }, []);
+    }, [initialData]);
 
     useEffect(() => {
         if (!config || config.method === 'GET') {
