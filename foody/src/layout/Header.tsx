@@ -1,5 +1,7 @@
 import headerLogo from '@/assets/logo.jpg';
+import Button from '@/components/ui/Button';
 import { useCartCtx } from '@/context/cart-context';
+import Search from '@/layout/Search';
 
 export default function Header() {
     const { openCart, cart } = useCartCtx();
@@ -17,9 +19,10 @@ export default function Header() {
                     Foody
                 </h1>
             </div>
-            <button className='font-title text-2xl' onClick={openCart}>
+            <Search />
+            <Button variant='text' className='text-2xl' onClick={openCart}>
                 Cart ({totalItems})
-            </button>
+            </Button>
         </header>
     );
 }
