@@ -5,7 +5,9 @@ export default function MainNavigation() {
         <header className='mx-auto flex max-w-[60rem] justify-center p-8'>
             <ul className='flex gap-4'>
                 <NavListItem href='/'>Home</NavListItem>
-                <NavListItem href='/products'>Products</NavListItem>
+                <NavListItem href='/events' end={false}>
+                    Events
+                </NavListItem>
             </ul>
         </header>
     );

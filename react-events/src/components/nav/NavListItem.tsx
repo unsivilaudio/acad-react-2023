@@ -5,12 +5,14 @@ import clsx from 'clsx';
 type NavLinkProps<T extends ElementType> = {
     as?: T;
     children: ReactNode;
+    end?: boolean;
     href: string;
 };
 
 export default function NavListItem<T extends ElementType>({
     as,
     href,
+    end = true,
     children,
 }: NavLinkProps<T>) {
     const Wrapper = as || 'li';
@@ -24,7 +26,7 @@ export default function NavListItem<T extends ElementType>({
                     })
                 }
                 to={href}
-                end
+                end={end}
             >
                 {children}
             </NavLink>

@@ -1,10 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import RootLayout from '@/layout/RootLayout';
+import EventsLayout from '@/layout/EventsLayout';
+
 import HomePage from '@/pages/Home';
-import ProductsPage from '@/pages/Products';
 import PageError from '@/pages/PageError';
-import ProductDetail from '@/pages/ProductDetail';
+import EventDetailPage from '@/pages/EventDetail';
+import NewEventPage from '@/pages/NewEvent';
+import EventsPage from '@/pages/Events';
+import EditEventPage from '@/pages/EditEvent';
 
 const router = createBrowserRouter([
     {
@@ -14,12 +18,20 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             {
-                path: 'products',
+                path: 'events',
+                element: <EventsLayout />,
                 children: [
-                    { index: true, element: <ProductsPage /> },
-                    { path: ':productId', element: <ProductDetail /> },
+                    { index: true, element: <EventsPage /> },
+                    {
+                        path: ':eventId',
+                        children: [
+                            { index: true, element: <EventDetailPage /> },
+                            { path: 'edit', element: <EditEventPage /> },
+                        ],
+                    },
                 ],
             },
+            { path: 'events/new', element: <NewEventPage /> },
         ],
     },
 ]);
