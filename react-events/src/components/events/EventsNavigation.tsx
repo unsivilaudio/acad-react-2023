@@ -8,7 +8,7 @@ const EVENT_ROUTES = [
 
 function EventsNavigation() {
     const navListItems = EVENT_ROUTES.map((evtRoute) => (
-        <li>
+        <li key={evtRoute.path}>
             <NavLink
                 className={({ isActive }) =>
                     clsx(

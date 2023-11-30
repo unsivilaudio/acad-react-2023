@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useRouteError } from 'react-router-dom';
 import MainNavigation from '@/layout/MainNavigation';
 
 export default function PageError() {
+    const error = useRouteError();
+    console.log(error);
     return (
         <>
             <MainNavigation />

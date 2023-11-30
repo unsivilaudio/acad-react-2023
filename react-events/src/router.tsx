@@ -9,6 +9,14 @@ import EventDetailPage from '@/pages/EventDetail';
 import NewEventPage from '@/pages/NewEvent';
 import EventsPage from '@/pages/Events';
 import EditEventPage from '@/pages/EditEvent';
+import { fetchEventById, fetchEvents } from '@/util/loaders';
+import {
+    deleteEvent,
+    newsletterSignup,
+    postCreateEvent,
+    postEditEvent,
+} from '@/util/actions';
+import NewsletterPage from '@/pages/Newsletter';
 
 const router = createBrowserRouter([
     {
@@ -18,20 +26,38 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <HomePage /> },
             {
+                id: 'events',
                 path: 'events',
                 element: <EventsLayout />,
+                loader: fetchEvents,
                 children: [
                     { index: true, element: <EventsPage /> },
                     {
                         path: ':eventId',
+                        id: 'event-detail',
+                        loader: fetchEventById,
                         children: [
                             { index: true, element: <EventDetailPage /> },
-                            { path: 'edit', element: <EditEventPage /> },
+                            {
+                                path: 'edit',
+                                element: <EditEventPage />,
+                                action: postEditEvent,
+                            },
+                            { path: 'delete', action: deleteEvent },
                         ],
+                    },
+                    {
+                        path: 'new',
+                        element: <NewEventPage />,
+                        action: postCreateEvent,
                     },
                 ],
             },
-            { path: 'events/new', element: <NewEventPage /> },
+            {
+                path: '/newsletter',
+                element: <NewsletterPage />,
+                action: newsletterSignup,
+            },
         ],
     },
 ]);

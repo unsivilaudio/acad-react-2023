@@ -1,13 +1,19 @@
 import Button from '@/components/ui/Button';
 import type { Event } from '@/types/event';
+import { useSubmit } from 'react-router-dom';
 
 type EventItemProps = {
     event: Event;
 };
 
 function EventItem({ event }: EventItemProps) {
+    const submit = useSubmit();
+
     function startDeleteHandler() {
-        // ...
+        submit(null, {
+            method: 'DELETE',
+            action: `/events/${event.id}/delete`,
+        });
     }
 
     return (

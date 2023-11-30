@@ -1,19 +1,13 @@
+import { useRouteLoaderData } from 'react-router-dom';
+
+import type { Event } from '@/types/event';
 import EventsList from '@/components/events/EventsList';
 
 export default function EventsPage() {
+    const { events } = useRouteLoaderData('events') as { events: Event[] };
     return (
         <>
-            <EventsList
-                events={[
-                    {
-                        id: 'e1',
-                        title: 'Super Awesome',
-                        description: 'A great event no one should miss!',
-                        date: '12/22/2023',
-                        image: 'https://www.clarknexsen.com/wp-content/uploads/2021/09/ymca-01-1200.jpg',
-                    },
-                ]}
-            />
+            <EventsList events={events} />
         </>
     );
 }
