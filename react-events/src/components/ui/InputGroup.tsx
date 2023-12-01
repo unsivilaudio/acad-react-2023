@@ -9,12 +9,14 @@ import { twMerge } from 'tailwind-merge';
 
 type InputGroupProps<T extends ElementType> = {
     as?: T;
-    type?: 'text' | 'number' | 'date' | 'url';
+    id: string;
+    type?: 'text' | 'number' | 'date' | 'url' | 'email' | 'password';
     label?: string;
 } & ComponentPropsWithoutRef<'input'>;
 
 type TextGroupProps<T extends ElementType> = {
     as?: T;
+    id: string;
     type: 'textarea';
     label?: string;
 } & ComponentPropsWithoutRef<'textarea'>;
