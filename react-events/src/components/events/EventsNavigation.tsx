@@ -1,13 +1,17 @@
 import clsx from 'clsx';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useRouteLoaderData } from 'react-router-dom';
 
 const EVENT_ROUTES = [
-    { path: '/events', label: 'All Events' },
-    { path: '/events/new', label: 'New Event' },
+    { path: '/events', label: 'All Events', requiresAuth: false },
+    { path: '/events/new', label: 'New Event', requiresAuth: true },
 ];
 
 function EventsNavigation() {
-    const navListItems = EVENT_ROUTES.map((evtRoute) => (
+    const token = useRouteLoaderData('root') as string | undefined;
+
+    const navListItems = EVENT_ROUTES.filter(
+        (route) => (route.requiresAuth && token) || !route.requiresAuth,
+    ).map((evtRoute) => (
         <li key={evtRoute.path}>
             <NavLink
                 className={({ isActive }) =>

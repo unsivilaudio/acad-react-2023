@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 import RootLayout from '@/layout/RootLayout';
 import EventsLayout from '@/layout/EventsLayout';
@@ -9,20 +9,31 @@ import EventDetailPage from '@/pages/EventDetail';
 import NewEventPage from '@/pages/NewEvent';
 import EventsPage from '@/pages/Events';
 import EditEventPage from '@/pages/EditEvent';
-import { fetchEventById, fetchEvents } from '@/util/loaders';
+import NewsletterPage from '@/pages/Newsletter';
+import Authentication from '@/pages/Authentication';
+
 import {
+    checkAuthLoader,
+    fetchEventById,
+    fetchEvents,
+    tokenLoader,
+} from '@/util/loaders';
+import {
+    authenticateUser,
     deleteEvent,
+    logoutUser,
     newsletterSignup,
     postCreateEvent,
     postEditEvent,
 } from '@/util/actions';
-import NewsletterPage from '@/pages/Newsletter';
 
 const router = createBrowserRouter([
     {
+        id: 'root',
         path: '/',
         element: <RootLayout />,
         errorElement: <PageError />,
+        loader: tokenLoader,
         children: [
             { index: true, element: <HomePage /> },
             {
@@ -42,8 +53,14 @@ const router = createBrowserRouter([
                                 path: 'edit',
                                 element: <EditEventPage />,
                                 action: postEditEvent,
+                                loader: checkAuthLoader,
                             },
-                            { path: 'delete', action: deleteEvent },
+                            {
+                                path: 'delete',
+                                action: deleteEvent,
+                                element: <Navigate to='/events' />,
+                                loader: checkAuthLoader,
+                            },
                         ],
                     },
                     {
@@ -57,6 +74,16 @@ const router = createBrowserRouter([
                 path: '/newsletter',
                 element: <NewsletterPage />,
                 action: newsletterSignup,
+            },
+            {
+                path: 'auth',
+                element: <Authentication />,
+                action: authenticateUser,
+            },
+            {
+                path: 'logout',
+                element: <Navigate to='/' />,
+                loader: logoutUser,
             },
         ],
     },
