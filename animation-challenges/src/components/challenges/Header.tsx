@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import NewChallenge from '@/components/challenges/NewChallenge';
 
@@ -16,7 +17,9 @@ export default function Header() {
 
     return (
         <>
-            {isCreatingNewChallenge && <NewChallenge onDone={handleDone} />}
+            <AnimatePresence>
+                {isCreatingNewChallenge && <NewChallenge onDone={handleDone} />}
+            </AnimatePresence>
 
             <header
                 id='main-header'
@@ -25,12 +28,14 @@ export default function Header() {
                 <h1 className='text-3xl font-bold text-[#84b0fc]'>
                     Your Challenges
                 </h1>
-                <button
+                <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ type: 'spring', stiffness: 500 }}
                     onClick={handleStartAddNewChallenge}
                     className='rounded border-none bg-[#0f61ef] px-4 py-2 font-semibold text-white shadow-[0_2px_4px_rgba(0,0,0,0.2)] duration-200 hover:bg-[#0944aa]'
                 >
                     Add Challenge
-                </button>
+                </motion.button>
             </header>
         </>
     );

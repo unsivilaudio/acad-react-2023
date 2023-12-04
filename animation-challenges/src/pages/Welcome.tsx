@@ -1,16 +1,34 @@
 import { Link } from 'react-router-dom';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 import cityImg from '@/assets/city.jpg';
 import heroImg from '@/assets/hero.png';
 
 export default function WelcomePage() {
+    const { scrollY } = useScroll();
+
+    const yCity = useTransform(scrollY, [0, 200], [0, -100]);
+    const opacityCity = useTransform(
+        scrollY,
+        [0, 200, 300, 500],
+        [1, 0.5, 0.5, 0],
+    );
+    const yHero = useTransform(scrollY, [0, 200], [0, -150]);
+    const opacityHero = useTransform(scrollY, [0, 300, 500], [1, 1, 0]);
+    const yText = useTransform(scrollY, [0, 200, 300, 500], [0, 50, 50, 300]);
+    const scaleText = useTransform(scrollY, [0, 300], [1, 1.5]);
+
     return (
         <>
             <header id='welcome-header' className='relative h-screen'>
-                <div
+                <motion.div
                     id='welcome-header-content'
                     className='absolute left-[calc(50%-20rem)] top-[30%] z-10 w-[40rem] text-center'
-                    style={{ textShadow: '0 0 6px rgba(0,0,0,0.5)' }}
+                    style={{
+                        textShadow: '0 0 6px rgba(0,0,0,0.5)',
+                        scale: scaleText,
+                        y: yText,
+                    }}
                 >
                     <h1 className='my-8 text-5xl font-bold'>
                         Ready for a challenge?
@@ -22,14 +40,16 @@ export default function WelcomePage() {
                     >
                         Get Started
                     </Link>
-                </div>
-                <img
+                </motion.div>
+                <motion.img
+                    style={{ opacity: opacityCity, y: yCity }}
                     className='absolute top-0 h-full w-full object-cover'
                     src={cityImg}
                     alt='A city skyline touched by sunlight'
                     id='city-image'
                 />
-                <img
+                <motion.img
+                    style={{ opacity: opacityHero, y: yHero }}
                     className='absolute bottom-[20%] left-[30%] w-[25rem] max-w-[40%] object-cover drop-shadow-[0_0_6px_rgba(0,0,0,0.5)]'
                     src={heroImg}
                     alt='A superhero wearing a cape'

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { Challenge } from '@/types/challenge';
 import { useChallengeCtx } from '@/store/challenges-context';
@@ -42,23 +43,40 @@ export default function Challenges() {
                 onSelectType={handleSelectType}
                 selectedType={selectedType}
             >
-                {displayedChallenges.length > 0 && (
-                    <ol className='mt-8 flex w-full max-w-[90%] flex-col gap-4'>
-                        {displayedChallenges.map((challenge) => (
-                            <ChallengeItem
-                                key={challenge.id}
-                                challenge={challenge}
-                                onViewDetails={() =>
-                                    handleViewDetails(challenge.id)
-                                }
-                                isExpanded={expanded === challenge.id}
-                            />
-                        ))}
-                    </ol>
-                )}
-                {displayedChallenges.length === 0 && (
-                    <p>No challenges found.</p>
-                )}
+                <AnimatePresence mode='wait'>
+                    {displayedChallenges.length > 0 && (
+                        <motion.ol
+                            key='challenge-items'
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className='mt-8 flex w-full max-w-[90%] flex-col gap-4'
+                            exit={{ y: -30, opacity: 0 }}
+                        >
+                            <AnimatePresence>
+                                {displayedChallenges.map((challenge) => (
+                                    <ChallengeItem
+                                        key={challenge.id}
+                                        challenge={challenge}
+                                        onViewDetails={() =>
+                                            handleViewDetails(challenge.id)
+                                        }
+                                        isExpanded={expanded === challenge.id}
+                                    />
+                                ))}
+                            </AnimatePresence>
+                        </motion.ol>
+                    )}
+                    {displayedChallenges.length === 0 && (
+                        <motion.p
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className='challenge-fallback'
+                        >
+                            No challenges found.
+                        </motion.p>
+                    )}
+                </AnimatePresence>
             </ChallengeTabs>
         </div>
     );

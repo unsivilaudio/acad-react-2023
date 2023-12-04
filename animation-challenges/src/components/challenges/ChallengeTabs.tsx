@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { motion } from 'framer-motion';
 
 import Badge from '@/components/ui/Badge';
 import { Challenge } from '@/types/challenge';
@@ -24,10 +25,13 @@ function Tab({ isSelected, onSelect, badgeCaption, children }: TabProps) {
         <li>
             <button className={btnClasses} onClick={onSelect}>
                 {children}
-                <Badge caption={badgeCaption}></Badge>
+                <Badge key={badgeCaption} caption={badgeCaption}></Badge>
             </button>
             {isSelected && (
-                <div className='rounded-lg border-[1.5px] border-[#0f86ef]' />
+                <motion.div
+                    layoutId='tab-indicator'
+                    className='rounded-lg border-[1.5px] border-[#0f86ef]'
+                />
             )}
         </li>
     );

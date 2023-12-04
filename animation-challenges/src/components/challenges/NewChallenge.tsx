@@ -1,4 +1,5 @@
 import { useRef, useState, type SyntheticEvent } from 'react';
+import { motion, useAnimate, stagger } from 'framer-motion';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -25,6 +26,8 @@ export default function NewChallenge({ onDone }: NewChallengeProps) {
         null,
     );
 
+    const [scope, animate] = useAnimate();
+
     const { addChallenge } = useChallengeCtx();
 
     function handleSelectImage(image: SelectedImage) {
@@ -38,8 +41,14 @@ export default function NewChallenge({ onDone }: NewChallengeProps) {
             !title.current ||
             !description.current ||
             !deadline.current
-        )
+        ) {
+            animate(
+                'input, textarea',
+                { x: [-10, 0, 10, 0] },
+                { delay: stagger(0.05) },
+            );
             return;
+        }
         const challenge = {
             title: title.current.value,
             description: description.current.value,
@@ -63,6 +72,7 @@ export default function NewChallenge({ onDone }: NewChallengeProps) {
     return (
         <Modal title='New Challenge' onClose={onDone}>
             <form
+                ref={scope}
                 id='new-challenge'
                 onSubmit={handleSubmit}
                 className='w-[85vw] max-w-[30rem] space-y-6 pt-8'
@@ -80,12 +90,20 @@ export default function NewChallenge({ onDone }: NewChallengeProps) {
                     id='deadline'
                     ref={deadline}
                 />
-                <ul
+                <motion.ul
                     id='new-challenge-images'
                     className='grid grid-cols-[repeat(auto-fill,3rem)] gap-2'
+                    variants={{
+                        visible: { transition: { staggerChildren: 0.05 } },
+                    }}
                 >
                     {images.map((image: SelectedImage) => (
-                        <li
+                        <motion.li
+                            variants={{
+                                hidden: { opacity: 0, scale: 0.5 },
+                                visible: { opacity: 1, scale: [0.8, 1.3, 1] },
+                            }}
+                            exit={{ opacity: 1, scale: 1 }}
                             key={image.alt}
                             onClick={() => handleSelectImage(image)}
                             className={twMerge(
@@ -102,9 +120,9 @@ export default function NewChallenge({ onDone }: NewChallengeProps) {
                                 {...image}
                                 className='h-full w-full object-contain'
                             />
-                        </li>
+                        </motion.li>
                     ))}
-                </ul>
+                </motion.ul>
 
                 <p className='mt-4 flex justify-end gap-4'>
                     <button

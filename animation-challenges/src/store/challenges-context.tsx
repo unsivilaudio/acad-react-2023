@@ -5,6 +5,7 @@ import {
     useContext,
 } from 'react';
 import type { Challenge } from '@/types/challenge';
+import { DUMMY_CHALLENGES } from '@/assets/images';
 
 type ChallengeContextValue = {
     challenges: Challenge[];
@@ -29,7 +30,7 @@ export const useChallengeCtx = () => {
 export default function ChallengesContextProvider({
     children,
 }: PropsWithChildren) {
-    const [challenges, setChallenges] = useState<Challenge[]>([]);
+    const [challenges, setChallenges] = useState<Challenge[]>(DUMMY_CHALLENGES);
 
     function addChallenge(challenge: Challenge) {
         setChallenges((prevChallenges) => [

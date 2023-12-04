@@ -1,5 +1,6 @@
 import { Challenge } from '@/types/challenge.js';
 import { useChallengeCtx } from '../../store/challenges-context.js';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type ChallengeItemProps = {
     challenge: Challenge;
@@ -32,7 +33,7 @@ export default function ChallengeItem({
     }
 
     return (
-        <li>
+        <motion.li layout exit={{ y: -30, opacity: 0 }}>
             <article className='w-full space-y-4'>
                 <header className='flex gap-4'>
                     <img
@@ -46,7 +47,7 @@ export default function ChallengeItem({
                         <p className='font-title text-xs'>
                             Complete until {formattedDate}
                         </p>
-                        <p className='font-title flex justify-end gap-4 text-xs'>
+                        <p className='flex justify-end gap-4 font-title text-xs'>
                             <button
                                 onClick={handleCancel}
                                 className='border-none bg-transparent px-2 py-1 text-[#ff7b7b] duration-200 hover:text-[#ff4f4f]'
@@ -66,24 +67,33 @@ export default function ChallengeItem({
                     <p>
                         <button
                             onClick={onViewDetails}
-                            className='border-none bg-transparent text-[#7aaafc]'
+                            className='flex items-center gap-1 border-none bg-transparent text-[#7aaafc]'
                         >
-                            View Details{' '}
-                            <span className='m-1 inline-block text-sm'>
+                            <span>View Details</span>
+                            <motion.span
+                                animate={{ rotate: isExpanded ? 180 : 0 }}
+                                className='-mb-[1px] pb-1 text-sm duration-200'
+                                style={{ lineHeight: 'inherit' }}
+                            >
                                 &#9650;
-                            </span>
+                            </motion.span>
                         </button>
                     </p>
-
-                    {isExpanded && (
-                        <div>
-                            <p className='challenge-item-description'>
-                                {challenge.description}
-                            </p>
-                        </div>
-                    )}
+                    <AnimatePresence>
+                        {isExpanded && (
+                            <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                            >
+                                <p className='challenge-item-description'>
+                                    {challenge.description}
+                                </p>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             </article>
-        </li>
+        </motion.li>
     );
 }
