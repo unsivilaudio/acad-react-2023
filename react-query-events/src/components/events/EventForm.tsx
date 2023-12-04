@@ -1,8 +1,12 @@
 import { useState, type ReactNode, type SyntheticEvent } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import ImagePicker from '../ImagePicker.js';
-import { Event } from '@/types/event.js';
-import InputGroup from '@/components/ui/InputGroup.js';
+import { fetchSelectableImages } from '@/util/http';
+import { Event, EventSelectableImage } from '@/types/event.js';
+import InputGroup from '@/components/ui/InputGroup';
+import ImagePicker from '@/components/ImagePicker';
+import AppError from '@/util/app-error';
+import ErrorBlock from '@/components/ui/ErrorBlock';
 
 type EventFormProps = {
     inputData?: Omit<Event, 'id'>;
@@ -18,6 +22,14 @@ export default function EventForm({
     const [selectedImage, setSelectedImage] = useState<string | undefined>(
         inputData?.image,
     );
+
+    const { data, isPending, isError } = useQuery<
+        EventSelectableImage[],
+        AppError
+    >({
+        queryKey: ['events', 'selectable-images'],
+        queryFn: fetchSelectableImages,
+    });
 
     function handleSelectImage(image?: string) {
         if (!image) return;
@@ -44,11 +56,20 @@ export default function EventForm({
                 label='Title'
                 defaultValue={inputData?.title ?? ''}
             />
-            <ImagePicker
-                images={[]}
-                onSelect={handleSelectImage}
-                selectedImage={selectedImage}
-            />
+            {isPending && <p>Loading selectable images...</p>}
+            {isError && (
+                <ErrorBlock
+                    title='Failed to load selectable images'
+                    message='Please try again later.'
+                />
+            )}
+            {data && (
+                <ImagePicker
+                    images={data}
+                    onSelect={handleSelectImage}
+                    selectedImage={selectedImage}
+                />
+            )}
             <InputGroup
                 id='description'
                 label='Description'

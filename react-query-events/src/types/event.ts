@@ -7,3 +7,8 @@ export type Event = {
     time: string;
     location: string;
 };
+
+export type EventSelectableImage = {
+    path: string;
+    caption: string;
+};

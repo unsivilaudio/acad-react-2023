@@ -1,6 +1,7 @@
 class AppError extends Error {
     public code?: number;
-    public info?: string | { [key: string]: object | string | number };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public info?: { [K: string]: any };
 
     constructor(message: string) {
         super(message);

@@ -1,7 +1,10 @@
 import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+import { EventSelectableImage } from '@/types/event';
 
 type ImagePickerProps = {
-    images: { path: string; caption: string }[];
+    images: EventSelectableImage[];
     selectedImage?: string;
     onSelect: (imagePath: string) => void;
 };
@@ -21,16 +24,18 @@ export default function ImagePicker({
                     <li
                         key={image.path}
                         onClick={() => onSelect(image.path)}
-                        className={clsx(
-                            'h-12 w-16 overflow-hidden rounded border-2 border-transparent',
-                            {
-                                'border-[#e30d7c]':
-                                    selectedImage === image.path,
-                            },
+                        className={twMerge(
+                            clsx(
+                                'h-12 w-16 cursor-pointer overflow-hidden rounded border-2 border-transparent duration-200',
+                                {
+                                    'border-[#e30d7c]':
+                                        selectedImage === image.path,
+                                },
+                            ),
                         )}
                     >
                         <img
-                            className='mx-auto my-8 flex w-[40rem] items-center justify-between'
+                            className='h-full w-full object-cover'
                             src={`http://dev.me:8080/${image.path}`}
                             alt={image.caption}
                         />
