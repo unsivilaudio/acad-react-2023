@@ -1,11 +1,10 @@
-import type { Product } from '@/models/product';
-
+import useProductsStore from '@/store/custom/hooks/use-products-store';
 import ProductItem from '@/components/products/ProductItem';
-import useProductsContext from '@/store/context/hooks/use-products-context';
 
 export default function ProductsPage() {
-    const productsCtx = useProductsContext();
-    const productList: Product[] = productsCtx.products;
+    const [state] = useProductsStore();
+
+    const productList = state.products;
     return (
         <ul className='products-list'>
             {productList.map((prod) => (

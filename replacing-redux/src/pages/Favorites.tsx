@@ -1,10 +1,9 @@
-import useProductsContext from '@/store/context/hooks/use-products-context';
-
+import useProductsStore from '@/store/custom/hooks/use-products-store';
 import FavoriteItem from '@/components/favorites/FavoriteItem';
 
 export default function Favorites() {
-    const productsCtx = useProductsContext();
-    const favoriteProducts = productsCtx.products.filter((p) => p.isFavorite);
+    const [state] = useProductsStore();
+    const favoriteProducts = state.products.filter((p) => p.isFavorite);
 
     let content = <p className='m-12 text-center'>Got no favorites yet!</p>;
 

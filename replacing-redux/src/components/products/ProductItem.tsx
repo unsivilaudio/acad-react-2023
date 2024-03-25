@@ -1,6 +1,8 @@
 import { twMerge } from 'tailwind-merge';
 import Card from '@/components/ui/Card';
-import useProductsContext from '@/store/context/hooks/use-products-context';
+
+import { useStore } from '@/store/custom/store';
+import { ProductsActions, ProductsStore } from '@/store/custom/products-store';
 
 interface ProductItemProps {
     id: string;
@@ -15,10 +17,10 @@ export default function ProductItem({
     description,
     isFav,
 }: ProductItemProps) {
-    const { toggleFavorite } = useProductsContext();
+    const dispatch = useStore<ProductsStore, ProductsActions>()[1];
 
     function toggleFavHandler() {
-        toggleFavorite(id);
+        dispatch('TOGGLE_FAVORITE', id);
     }
 
     return (
