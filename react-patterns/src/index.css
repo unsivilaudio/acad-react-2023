@@ -7,6 +7,40 @@
 @layer base {
     body {
         color: #ecedef;
-        background-color: #1f1f1f;
+        background-color: #151925;
+        @apply font-body;
+    }
+
+    main {
+        max-width: 40rem;
+        margin: 2rem auto;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        @apply font-title;
+    }
+
+    h1 {
+        @apply text-4xl font-semibold;
+    }
+
+    h2 {
+        @apply text-3xl font-bold;
+    }
+
+    h3 {
+        @apply text-2xl;
+    }
+
+    h4 {
+        @apply text-lg;
+    }
+
+    h3,
+    h4 {
+        @apply font-bold;
     }
 }
