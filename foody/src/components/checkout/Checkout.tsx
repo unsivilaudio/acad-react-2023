@@ -1,4 +1,4 @@
-import { type SyntheticEvent, type ReactNode } from 'react';
+import { type SyntheticEvent, type ReactNode, useActionState } from 'react';
 
 import { useCartCtx } from '@/context/cart-context';
 import Button from '@/components/ui/Button';
@@ -21,18 +21,13 @@ const requestConfig = {
 
 export default function Checkout() {
     const { progress, closeCart, clearCart, cart } = useCartCtx();
-    const {
-        data,
-        isLoading: isSending,
-        error,
-        sendRequest,
-        clearData,
-    } = useHttp('http://localhost:8080/orders', requestConfig);
+    const { data, error, sendRequest, clearData } = useHttp(
+        'http://localhost:8080/orders',
+        requestConfig,
+    );
 
-    async function handleSubmitForm(event: SyntheticEvent<HTMLFormElement>) {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const customerData = Object.fromEntries(formData) as CustomerFormValues;
+    async function checkoutAction(_prevState: FormData, fd: FormData) {
+        const customerData = Object.fromEntries(fd) as CustomerFormValues;
         await sendRequest(
             JSON.stringify({
                 order: {
@@ -40,10 +35,14 @@ export default function Checkout() {
                     customer: customerData,
                 },
             }),
-        ).then(() => {
-            (event.target as HTMLFormElement).reset();
-        });
+        );
+        return fd;
     }
+
+    const [_formState, formAction, pending] = useActionState<
+        FormData,
+        FormData
+    >(checkoutAction, new FormData());
 
     function handleSuccessClose() {
         clearCart();
@@ -59,7 +58,7 @@ export default function Checkout() {
         </>
     );
 
-    if (isSending) {
+    if (pending) {
         actions = <span className='pr-4'>Sending order data...</span>;
     }
 
@@ -83,10 +82,7 @@ export default function Checkout() {
 
     return (
         <Modal open={progress === 'checkout'} onClose={closeCart}>
-            <form
-                className='flex flex-col gap-2 py-2'
-                onSubmit={handleSubmitForm}
-            >
+            <form className='flex flex-col gap-2 py-2' action={formAction}>
                 <h2 className='font-title text-2xl font-bold'>Checkout</h2>
                 <p>Total Amount: ${cart.totalAmount.toFixed(2)}</p>
                 <div className='mb-3 flex flex-col gap-2'>
